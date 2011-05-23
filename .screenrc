@@ -1,4 +1,22 @@
-caption always "%{= bk} %{= bW} [%n]%t @ %H %{-} %= %{= bR} %l %{-} | %{= KG} %Y-%m-%d %{-} "
-hardstatus alwayslastline " %-Lw%{= Bw}%n%f %t%{-}%+Lw %=| %{= KR} %0c:%s "
+hardstatus alwayslastline " %-Lw%{= Bw}%n%f %t%{-}%+Lw"
 shelltitle '} | tcsh'
 vbell off
+defutf8 on
+bindkey "^[a" prev
+bindkey "^[d" next
+bindkey "^[s" copy
+bindkey "^[w" screen
+bindkey "^[`" select 0
+bindkey "^[1" select 1
+bindkey "^[2" select 2
+bindkey "^[3" select 3
+bindkey "^[4" select 4
+bindkey "^[5" select 5
+bindkey "^[6" select 6
+bindkey "^[7" select 7
+bindkey "^[8" select 8
+bindkey "^[9" select 9
+bindkey "^[0" select 10
+bindkey "^[-" select 11
+bindkey "^[=" select 12
+

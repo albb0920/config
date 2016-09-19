@@ -4,9 +4,17 @@
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-
-alias ls='ls --color=auto'
+if [ "$(uname)" == "Darwin" ]; then
+    export CLICOLOR=1
+    export LSCOLORS=ExGxdxdxCxDxDxBxBxegeg 
+else
+    alias ls='ls --color=auto'
+fi
 alias rr='. ~/.bashrc'
+alias cls='clear'
+
+export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
+export EDITOR="vim"
 
 # prompt
 PS1='\[\e[1m\]\h [\w] -\u- \[\e[m\]'

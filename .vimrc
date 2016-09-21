@@ -25,7 +25,9 @@ set smarttab
 " folding
 set foldlevel=15
 
+" case-insensive search
 set ignorecase
+set smartcase
 
 " show invisible chars
 " set listchars=tab:→\ 

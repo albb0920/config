@@ -22,6 +22,11 @@ set shiftwidth=4
 set tabstop=4
 set smarttab
 
+" folding
+set foldlevel=15
+
+set ignorecase
+
 " show invisible chars
 " set listchars=tab:→\ 
 " set list
@@ -36,7 +41,6 @@ let g:netrw_liststyle=3
 " filetype specifics
 autocmd FileType ruby,eruby,yaml,coffee setl ai sw=2 sts=2 expandtab
 autocmd FileType php setl shiftwidth=4 tabstop=4 cinoptions=m1
-autocmd FileType python setl expandtab
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
@@ -78,9 +82,15 @@ endif
 
 " color scheme
 set background=dark
-highlight PmenuSel ctermfg=darkblue ctermbg=gray
-" highlight Pmenu ctermbg=green
-highlight Pmenu ctermbg=238 gui=bold
+
+"TODO: figure not whats going on with my colors
+if has('mac')
+	highlight PmenuSel ctermfg=darkblue ctermbg=gray
+	highlight Pmenu ctermbg=238 gui=bold
+else
+	highlight Pmenu ctermbg=green
+end
+
 
 " mkdir is runed under sh since tcsh and bash has different redirect syntax 
 " backup file, in case of system power off etc.
@@ -171,6 +181,10 @@ Plugin 'othree/html5.vim'
 " -- No more Bundle is allowed after this
 call vundle#end()
 filetype plugin indent on
+
+" set type specific stuff here to prevent override by plugins
+autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent noexpandtab
+
 
 " -- Syntax highlight and serarch --
 " Switch syntax highlighting on, when the terminal has colors

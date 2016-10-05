@@ -93,6 +93,9 @@ else
 	highlight Pmenu ctermbg=green
 end
 
+" Over long highlight
+let &colorcolumn=join(range(101,999),",")
+highlight ColorColumn ctermbg=233
 
 " mkdir is runed under sh since tcsh and bash has different redirect syntax 
 " backup file, in case of system power off etc.
@@ -115,52 +118,58 @@ au BufRead,BufNewFile,BufWrite {*.coffee,*.yaml,*.yml,*.haml} set foldmethod=ind
 " Vundle
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Bundle 'vundle'
+Plugin 'VundleVim/Vundle.vim'
 
 " latest ruby support
-Bundle 'vim-ruby/vim-ruby'
+Plugin 'vim-ruby/vim-ruby'
 
-Bundle 'tpope/vim-rails'
-Bundle 'scrooloose/nerdtree'
-Bundle 'dbext.vim'
-Bundle 'surround.vim'
+Plugin 'tpope/vim-rails'
+Plugin 'scrooloose/nerdtree'
+Plugin 'dbext.vim'
+Plugin 'surround.vim'
 
 "dependency for Fuzzyfinder
-Bundle 'L9'
-Bundle 'FuzzyFinder'
+Plugin 'L9'
+Plugin 'FuzzyFinder'
 autocmd User Rails 
   \ let g:fuf_coveragefile_globPatterns = [RailsRoot().'**/*']
 
-Bundle 'YankRing.vim'
+Plugin 'YankRing.vim'
 let g:yankring_history_dir = '$HOME/.vim'
 
-Bundle 'Rubytest.vim'
+Plugin 'Rubytest.vim'
 let g:rubytest_in_quickfix = 1
 
-Bundle 'tpope/vim-fugitive'
-Bundle 'sjl/gundo.vim'
-Bundle 'LustyJuggler'
+Plugin 'tpope/vim-fugitive'
+
+if has('python3')
+	let g:gundo_prefer_python3 = 1
+end
+Plugin 'sjl/gundo.vim'
+
+Plugin 'LustyJuggler'
 nmap <silent> <Leader>b :LustyJuggler<CR>
 
 "Better syntax higtlight for css and scss
-Bundle 'hail2u/vim-css3-syntax'
-Bundle 'cakebaker/scss-syntax.vim'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'cakebaker/scss-syntax.vim'
 
 "TODO: I might weed some shortcuts for this
-Bundle 'Tabular'
+Plugin 'Tabular'
 
-Bundle 'tComment'
-Bundle 'EasyMotion'
+Plugin 'tComment'
+Plugin 'EasyMotion'
 let g:EasyMotion_leader_key = '<Leader>' " EasyMotion leader key
 
-Bundle 'msanders/snipmate.vim'
-Bundle 'repeat.vim'
+Plugin 'msanders/snipmate.vim'
+Plugin 'honza/vim-snippets'
+Plugin 'repeat.vim'
 
 " most recent commands
-Bundle 'mru.vim'
+Plugin 'mru.vim'
 
 " syntax check
-Bundle 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=0
 let g:syntastic_enable_highlighting=1
@@ -169,23 +178,24 @@ let g:syntastic_loc_list_height=5
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['scss'] }
 
 " coffee script support
-Bundle 'kchmck/vim-coffee-script'
+Plugin 'kchmck/vim-coffee-script'
 
 " slim
-Bundle 'slim-template/vim-slim'
+Plugin 'slim-template/vim-slim'
 
 " Convert camelCase and MixCase and snake_case
-Bundle 'abolish.vim'
+Plugin 'abolish.vim'
 
 " HTML5
 Plugin 'othree/html5.vim'
 
-" -- No more Bundle is allowed after this
+" -- No more Plugin is allowed after this
 call vundle#end()
 filetype plugin indent on
 
 " set type specific stuff here to prevent override by plugins
-autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent noexpandtab
+autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent
+autocmd FileType slim setl indentexpr= autoindent
 
 
 " -- Syntax highlight and serarch --

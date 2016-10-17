@@ -30,12 +30,8 @@ set ignorecase
 set smartcase
 
 " show invisible chars
-" set listchars=tab:→\ 
-" set list
-
-" highlight trailing space
-highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
-match ExtraWhitespace /\s\+\%#\@<!$/
+"set listchars=tab:→\ 
+"set list
 
 " file browser use tree mode
 let g:netrw_liststyle=3
@@ -96,6 +92,14 @@ end
 " Over long highlight
 let &colorcolumn=join(range(101,999),",")
 highlight ColorColumn ctermbg=233
+
+" Tabs
+highlight Tabs ctermbg=233
+match Tabs /\t/
+
+" highlight trailing space
+highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
+match ExtraWhitespace /\s\+\%#\@<!$/
 
 " mkdir is runed under sh since tcsh and bash has different redirect syntax 
 " backup file, in case of system power off etc.
@@ -161,7 +165,11 @@ Plugin 'tComment'
 Plugin 'EasyMotion'
 let g:EasyMotion_leader_key = '<Leader>' " EasyMotion leader key
 
-Plugin 'msanders/snipmate.vim'
+" SnipMate and dependencies
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+
 Plugin 'honza/vim-snippets'
 Plugin 'repeat.vim'
 
@@ -194,9 +202,10 @@ call vundle#end()
 filetype plugin indent on
 
 " set type specific stuff here to prevent override by plugins
-autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent
+autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent expandtab
 autocmd FileType slim setl indentexpr= autoindent
 
+autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 
 " -- Syntax highlight and serarch --
 " Switch syntax highlighting on, when the terminal has colors

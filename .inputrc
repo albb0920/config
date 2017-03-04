@@ -1,9 +1,13 @@
 set show-all-if-ambiguous on
 set match-hidden-files off
 set visible-stats on
+set editing-mode vi
+set show-mode-in-prompt on
 
 # FreeBSD style history
-"\e[5~"':history-search-backward
-"\e[6~"':history-search-forward
+"\e[A":history-search-backward
+"\e[B":history-search-forward
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
+
+

@@ -28,3 +28,6 @@ fi
 _expand(){
     return 0;
 }
+
+source vender/bundler-exec/bundler-exec.sh
+

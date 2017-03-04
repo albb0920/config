@@ -1,7 +1,10 @@
 " == albb0920's .vimrc ==
 " Use Vim settings, rather than Vi settings (much better!).
 set nocompatible
-"
+
+" use built in plugin "matchit"
+runtime macros/matchit.vim
+
 " Vundle wants filetype to be enabled after it's loaded
 filetype off
 
@@ -49,6 +52,7 @@ map Q gq
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
+nnoremap gp `[v`]
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -78,29 +82,6 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-" color scheme
-set background=dark
-
-"TODO: figure not whats going on with my colors
-if has('mac')
-	highlight PmenuSel ctermfg=darkblue ctermbg=gray
-	highlight Pmenu ctermbg=238 gui=bold
-else
-	highlight Pmenu ctermbg=green
-end
-
-" Over long highlight
-let &colorcolumn=join(range(101,999),",")
-highlight ColorColumn ctermbg=233
-
-" Tabs
-highlight Tabs ctermbg=233
-match Tabs /\t/
-
-" highlight trailing space
-highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
-match ExtraWhitespace /\s\+\%#\@<!$/
-
 " mkdir is runed under sh since tcsh and bash has different redirect syntax 
 " backup file, in case of system power off etc.
 silent !/bin/sh -c "mkdir ~/.vim/backup > /dev/null 2>&1" 
@@ -126,6 +107,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " latest ruby support
 Plugin 'vim-ruby/vim-ruby'
+Plugin 'ruby-matchit'
 
 Plugin 'tpope/vim-rails'
 Plugin 'scrooloose/nerdtree'
@@ -197,6 +179,9 @@ Plugin 'abolish.vim'
 " HTML5
 Plugin 'othree/html5.vim'
 
+" Open file with line number
+Bundle 'bogado/file-line'
+
 " -- No more Plugin is allowed after this
 call vundle#end()
 filetype plugin indent on
@@ -204,15 +189,40 @@ filetype plugin indent on
 " set type specific stuff here to prevent override by plugins
 autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent expandtab
 autocmd FileType slim setl indentexpr= autoindent
+autocmd FileType scss,css setl iskeyword+=\-
 
 autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 
 " -- Syntax highlight and serarch --
 " Switch syntax highlighting on, when the terminal has colors
+
+" color scheme
+set background=dark
+
 if &t_Co > 2 || has("gui_running")
   syntax on	" this line must be here or syntax plugins won't work
   set hlsearch
 endif
+
+"TODO: figure not whats going on with my colors
+if has('mac')
+	highlight PmenuSel ctermfg=darkblue ctermbg=gray
+	highlight Pmenu ctermbg=238 gui=bold
+else
+	highlight Pmenu ctermbg=green
+end
+
+" Over long highlight
+let &colorcolumn=join(range(101,999),",")
+highlight ColorColumn ctermbg=233
+
+" Tabs
+highlight Tabs ctermbg=233
+call matchadd('Tabs', '\t')
+
+" highlight trailing space
+highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
+call matchadd('ExtraWhitespace', '\s\+\%#\@<!$', 11)
 
 " -- Command shortcuts --
 " in case I forget to sudo
@@ -242,13 +252,38 @@ function! SoftTabWithTabStopEightToTabStopFour()
 endfunction
 command! FixTabSpace call SoftTabWithTabStopEightToTabStopFour()
 
-
 " toggle spell check
 nmap <leader>s :setlocal spell<CR>
+
+" configure vim-rails
+
+let g:rails_gem_projections = {
+      \ "factory_girl_rails": {
+      \   "spec/factories/*.rb": {
+      \     "command": "factory",
+      \     "affinity": "collection",
+      \     "alternate": "app/models/%i.rb",
+      \     "related": "db/schema.rb#%s",
+      \     "test": "spec/models/%i_spec.rb",
+      \     "template": "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+      \     "keywords": "factory sequence"
+      \   },
+      \   "test/factories/*.rb": {
+      \     "command": "factory",
+      \     "affinity": "collection",
+      \     "alternate": "app/models/%i.rb",
+      \     "related": "db/schema.rb#%s",
+      \     "test": "test/models/%i_test.rb",
+      \     "template": "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+      \     "keywords": "factory sequence"
+      \   }
+      \ }
+\}
 
 " -- Editing shorthands --
 
 " -- Custom hotkey --
+map Y y$
 set pastetoggle=<F1>
 imap <F2> <C-O>:FufCoverageFile<CR>
 map  <F2> :FufCoverageFile<CR>
@@ -257,3 +292,5 @@ map  <F3> :NERDTreeToggle<CR>
 imap <F5> <C-O>:GundoToggle<CR>
 map  <F5> :GundoToggle<CR>
 imap <F6> <C-O>:YRShow<CR>
+
+map  <F10> "+y

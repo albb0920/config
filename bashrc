@@ -12,6 +12,7 @@ else
 fi
 alias rr='. ~/.bashrc'
 alias cls='clear'
+alias apt='sudo apt'
 
 export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
 export EDITOR="vim"
@@ -29,5 +30,9 @@ _expand(){
     return 0;
 }
 
-source vender/bundler-exec/bundler-exec.sh
+#TODO: check .rbenv exists
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+source ~/config/vender/bundler-exec/bundler-exec.sh
 

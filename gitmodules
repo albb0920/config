@@ -1,0 +1,3 @@
+[submodule "vender/bundler-exec"]
+	path = vender/bundler-exec
+	url = https://github.com/gma/bundler-exec.git

@@ -117,8 +117,11 @@ Plugin 'surround.vim'
 "dependency for Fuzzyfinder
 Plugin 'L9'
 Plugin 'FuzzyFinder'
-autocmd User Rails 
-  \ let g:fuf_coveragefile_globPatterns = [RailsRoot().'**/*']
+"autocmd User Rails 
+"  \ let g:fuf_coveragefile_globPatterns = [RailsRoot().'**/*']
+
+" workaround for vim 8 paste error
+let @@ = ""
 
 Plugin 'YankRing.vim'
 let g:yankring_history_dir = '$HOME/.vim'
@@ -180,7 +183,9 @@ Plugin 'abolish.vim'
 Plugin 'othree/html5.vim'
 
 " Open file with line number
-Bundle 'bogado/file-line'
+Plugin 'bogado/file-line'
+
+Plugin 'Recover.vim'
 
 " -- No more Plugin is allowed after this
 call vundle#end()
@@ -294,3 +299,6 @@ map  <F5> :GundoToggle<CR>
 imap <F6> <C-O>:YRShow<CR>
 
 map  <F10> "+y
+
+
+autocmd BufRead,BufNewFile /home/albb0920/code/doppler/source/* let g:syntastic_slim_checkers=[]

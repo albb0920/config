@@ -1,5 +1,5 @@
 hardstatus alwayslastline " %-Lw%{= Bw}%n%f %t%{-}%+Lw"
-shelltitle '} | tcsh'
+shelltitle '} | shell'
 vbell off
 defutf8 on
 bindkey "^[a" prev

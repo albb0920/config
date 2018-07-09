@@ -18,6 +18,7 @@ set incsearch		" do incremental searching
 set hidden		" allow hidden buffer 
 let mapleader=","
 set ai			"Enable auto indent
+set textwidth=120
 
 " tabs
 set softtabstop=4	" two space indent by default
@@ -52,7 +53,7 @@ map Q gq
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
-nnoremap gp `[v`]
+nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -110,6 +111,27 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'ruby-matchit'
 
 Plugin 'tpope/vim-rails'
+let g:rails_projections = {
+      \ "test/factories/*.rb": {
+      \   "command":   "factory",
+      \   "affinity":  "collection",
+      \   "alternate": "app/models/%i.rb",
+      \   "related":   "db/schema.rb#%s",
+      \   "test":      "test/models/%i_test.rb",
+      \   "template":  "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+      \   "keywords":  "factory sequence"
+      \ },
+      \ "spec/factories/*.rb": {
+      \   "command":   "factory",
+      \   "affinity":  "collection",
+      \   "alternate": "app/models/%i.rb",
+      \   "related":   "db/schema.rb#%s",
+      \   "test":      "spec/models/%i_test.rb",
+      \   "template":  "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+      \   "keywords":  "factory sequence"
+      \ }
+\}
+
 Plugin 'scrooloose/nerdtree'
 Plugin 'dbext.vim'
 Plugin 'surround.vim'
@@ -168,7 +190,12 @@ let g:syntastic_enable_signs=0
 let g:syntastic_enable_highlighting=1
 let g:syntastic_auto_loc_list=1
 let g:syntastic_loc_list_height=5
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['scss'] }
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['scss', 'java'] }
+let g:syntastic_python_checkers = ['python', 'pyflakes', 'pycodestyle']
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+let g:syntastic_ruby_rubocop_args = '--force-exclusion'
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
 " coffee script support
 Plugin 'kchmck/vim-coffee-script'
@@ -186,6 +213,21 @@ Plugin 'othree/html5.vim'
 Plugin 'bogado/file-line'
 
 Plugin 'Recover.vim'
+
+" Yara syntax
+Plugin 'yaunj/vim-yara'
+
+" indent with tab, align with space
+" Plugin 'Smart-Tabs'
+
+" Audo indent style detection
+Plugin 'tpope/vim-sleuth'
+
+" ES6 syntax
+Plugin 'isRuslan/vim-es6'
+
+" indent motion
+Plugin 'jeetsukumaran/vim-indentwise'
 
 " -- No more Plugin is allowed after this
 call vundle#end()
@@ -205,8 +247,8 @@ autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 set background=dark
 
 if &t_Co > 2 || has("gui_running")
-  syntax on	" this line must be here or syntax plugins won't work
-  set hlsearch
+	syntax on	" this line must be here or syntax plugins won't work
+	set hlsearch
 endif
 
 "TODO: figure not whats going on with my colors
@@ -218,8 +260,11 @@ else
 end
 
 " Over long highlight
-let &colorcolumn=join(range(101,999),",")
-highlight ColorColumn ctermbg=233
+let &colorcolumn=join(range(121,999),",")
+highlight ColorColumn ctermbg=234
+
+highlight LengthCaution ctermbg=233
+call matchadd('LengthCaution', '\%100v.*')
 
 " Tabs
 highlight Tabs ctermbg=233
@@ -258,7 +303,7 @@ endfunction
 command! FixTabSpace call SoftTabWithTabStopEightToTabStopFour()
 
 " toggle spell check
-nmap <leader>s :setlocal spell<CR>
+nmap <leader>s :setlocal spell! spell?<CR>
 
 " configure vim-rails
 
@@ -300,5 +345,10 @@ imap <F6> <C-O>:YRShow<CR>
 
 map  <F10> "+y
 
+<<<<<<< HEAD:vimrc
 
 autocmd BufRead,BufNewFile /home/albb0920/code/doppler/source/* let g:syntastic_slim_checkers=[]
+=======
+" Host specific
+autocmd BufRead,BufNewFile ~/code/sonar_server*/* let g:syntastic_python_checkers = ['python']
+>>>>>>> update vimrc:.vimrc

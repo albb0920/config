@@ -41,7 +41,7 @@ set smartcase
 let g:netrw_liststyle=3
 
 " filetype specifics
-autocmd FileType ruby,eruby,yaml,coffee setl ai sw=2 sts=2 expandtab
+autocmd FileType ruby,eruby,yaml,coffee,pug setl ai sw=2 sts=2 expandtab
 autocmd FileType php setl shiftwidth=4 tabstop=4 cinoptions=m1
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -57,21 +57,21 @@ nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
-  set mouse=vih
+	set mouse=vih
 endif
 
 " Put these in an autocmd group, so that we can delete them easily.
 augroup vimrcEx
-  au!
+	au!
 
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
+	" For all text files set 'textwidth' to 78 characters.
+	autocmd FileType text setlocal textwidth=78
 
-  " jump to last known cursor position 
-  autocmd BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
+	" jump to last known cursor position 
+	autocmd BufReadPost *
+		\ if line("'\"") > 1 && line("'\"") <= line("$") |
+		\   exe "normal! g`\"" |
+		\ endif
 
 augroup END
 
@@ -79,11 +79,11 @@ augroup END
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
 if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+	command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
 
-" mkdir is runed under sh since tcsh and bash has different redirect syntax 
+" mkdir is runed under sh since tcsh and bash has different redirect syntax
 " backup file, in case of system power off etc.
 silent !/bin/sh -c "mkdir ~/.vim/backup > /dev/null 2>&1" 
 set backupdir=~/.vim/backup
@@ -112,24 +112,28 @@ Plugin 'ruby-matchit'
 
 Plugin 'tpope/vim-rails'
 let g:rails_projections = {
-      \ "test/factories/*.rb": {
-      \   "command":   "factory",
-      \   "affinity":  "collection",
-      \   "alternate": "app/models/%i.rb",
-      \   "related":   "db/schema.rb#%s",
-      \   "test":      "test/models/%i_test.rb",
-      \   "template":  "FactoryGirl.define do\n  factory :%i do\n  end\nend",
-      \   "keywords":  "factory sequence"
-      \ },
-      \ "spec/factories/*.rb": {
-      \   "command":   "factory",
-      \   "affinity":  "collection",
-      \   "alternate": "app/models/%i.rb",
-      \   "related":   "db/schema.rb#%s",
-      \   "test":      "spec/models/%i_test.rb",
-      \   "template":  "FactoryGirl.define do\n  factory :%i do\n  end\nend",
-      \   "keywords":  "factory sequence"
-      \ }
+	\ "app/javascript/*": {
+	\   "command": "javascript",
+	\   "affinity": "collection"
+	\ },
+	\ "test/factories/*.rb": {
+	\   "command":   "factory",
+	\   "affinity":  "collection",
+	\   "alternate": "app/models/%i.rb",
+	\   "related":   "db/schema.rb#%s",
+	\   "test":      "test/models/%i_test.rb",
+	\   "template":  "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+	\   "keywords":  "factory sequence"
+	\ },
+	\ "spec/factories/*.rb": {
+	\   "command":   "factory",
+	\   "affinity":  "collection",
+	\   "alternate": "app/models/%i.rb",
+	\   "related":   "db/schema.rb#%s",
+	\   "test":      "spec/models/%i_test.rb",
+	\   "template":  "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+	\   "keywords":  "factory sequence"
+	\ }
 \}
 
 Plugin 'scrooloose/nerdtree'
@@ -158,7 +162,7 @@ if has('python3')
 end
 Plugin 'sjl/gundo.vim'
 
-Plugin 'LustyJuggler'
+Plugin 'sjbach/lusty'
 nmap <silent> <Leader>b :LustyJuggler<CR>
 
 "Better syntax higtlight for css and scss
@@ -176,6 +180,7 @@ let g:EasyMotion_leader_key = '<Leader>' " EasyMotion leader key
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
+let g:snipMate = { 'snippet_version' : 1 }
 
 Plugin 'honza/vim-snippets'
 Plugin 'repeat.vim'
@@ -190,18 +195,34 @@ let g:syntastic_enable_signs=0
 let g:syntastic_enable_highlighting=1
 let g:syntastic_auto_loc_list=1
 let g:syntastic_loc_list_height=5
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['scss', 'java'] }
-let g:syntastic_python_checkers = ['python', 'pyflakes', 'pycodestyle']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['scss', 'java', 'cpp'] }
+let g:syntastic_python_checkers = ['pycodestyle'] "['python', 'pyflakes', 'pycodestyle']
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 let g:syntastic_ruby_rubocop_args = '--force-exclusion'
+let g:syntastic_ruby_rubocop_exe = 'rbenv exec bundle exec rubocop'
 let g:syntastic_cpp_compiler = 'clang++'
 let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
+" until jshint supports await
+" let g:syntastic_javascript_checkers = ['eslint']
+
+" yaml ruby specific
+let g:syntastic_yaml_jsyaml_quiet_messages = {'regex': 'unknown tag !<!binary>'}
+
+" erb
+let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a variable in void context'}
 
 " coffee script support
 Plugin 'kchmck/vim-coffee-script'
 
 " slim
 Plugin 'slim-template/vim-slim'
+
+" slm
+Plugin 'slm-lang/vim-slm'
+
+" Vue
+Plugin 'posva/vim-vue'
 
 " Convert camelCase and MixCase and snake_case
 Plugin 'abolish.vim'
@@ -210,7 +231,7 @@ Plugin 'abolish.vim'
 Plugin 'othree/html5.vim'
 
 " Open file with line number
-Plugin 'bogado/file-line'
+Plugin 'wsdjeg/vim-fetch'
 
 Plugin 'Recover.vim'
 
@@ -220,7 +241,7 @@ Plugin 'yaunj/vim-yara'
 " indent with tab, align with space
 " Plugin 'Smart-Tabs'
 
-" Audo indent style detection
+" Audo indent style detection (buggy with scss, disable for now)
 Plugin 'tpope/vim-sleuth'
 
 " ES6 syntax
@@ -229,6 +250,13 @@ Plugin 'isRuslan/vim-es6'
 " indent motion
 Plugin 'jeetsukumaran/vim-indentwise'
 
+" Provides :Mkdir for new file under new directory
+Plugin 'eunuch.vim'
+
+Plugin 'djoshea/vim-autoread'
+
+Plugin 'digitaltoad/vim-pug'
+
 " -- No more Plugin is allowed after this
 call vundle#end()
 filetype plugin indent on
@@ -236,7 +264,7 @@ filetype plugin indent on
 " set type specific stuff here to prevent override by plugins
 autocmd FileType python setl tabstop=4 nofoldenable foldmethod=indent expandtab
 autocmd FileType slim setl indentexpr= autoindent
-autocmd FileType scss,css setl iskeyword+=\-
+autocmd FileType scss,css setl iskeyword+=\- noexpandtab sw=4 ts=4
 
 autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 
@@ -283,8 +311,8 @@ cnoreabbrev bx up<bar>bd
 
 " create path & write
 function! WriteCreatingDirs()
-    execute ':silent !mkdir -p %:h'
-    write
+	execute ':silent !mkdir -p %:h'
+	write
 endfunction
 command! W call WriteCreatingDirs()
 
@@ -308,26 +336,26 @@ nmap <leader>s :setlocal spell! spell?<CR>
 " configure vim-rails
 
 let g:rails_gem_projections = {
-      \ "factory_girl_rails": {
-      \   "spec/factories/*.rb": {
-      \     "command": "factory",
-      \     "affinity": "collection",
-      \     "alternate": "app/models/%i.rb",
-      \     "related": "db/schema.rb#%s",
-      \     "test": "spec/models/%i_spec.rb",
-      \     "template": "FactoryGirl.define do\n  factory :%i do\n  end\nend",
-      \     "keywords": "factory sequence"
-      \   },
-      \   "test/factories/*.rb": {
-      \     "command": "factory",
-      \     "affinity": "collection",
-      \     "alternate": "app/models/%i.rb",
-      \     "related": "db/schema.rb#%s",
-      \     "test": "test/models/%i_test.rb",
-      \     "template": "FactoryGirl.define do\n  factory :%i do\n  end\nend",
-      \     "keywords": "factory sequence"
-      \   }
-      \ }
+	\ "factory_girl_rails": {
+	\   "spec/factories/*.rb": {
+	\     "command": "factory",
+	\     "affinity": "collection",
+	\     "alternate": "app/models/%i.rb",
+	\     "related": "db/schema.rb#%s",
+	\     "test": "spec/models/%i_spec.rb",
+	\     "template": "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+	\     "keywords": "factory sequence"
+	\   },
+	\   "test/factories/*.rb": {
+	\     "command": "factory",
+	\     "affinity": "collection",
+	\     "alternate": "app/models/%i.rb",
+	\     "related": "db/schema.rb#%s",
+	\     "test": "test/models/%i_test.rb",
+	\     "template": "FactoryGirl.define do\n  factory :%i do\n  end\nend",
+	\     "keywords": "factory sequence"
+	\   }
+	\ }
 \}
 
 " -- Editing shorthands --
@@ -345,10 +373,18 @@ imap <F6> <C-O>:YRShow<CR>
 
 map  <F10> "+y
 
-<<<<<<< HEAD:vimrc
-
-autocmd BufRead,BufNewFile /home/albb0920/code/doppler/source/* let g:syntastic_slim_checkers=[]
-=======
 " Host specific
-autocmd BufRead,BufNewFile ~/code/sonar_server*/* let g:syntastic_python_checkers = ['python']
->>>>>>> update vimrc:.vimrc
+autocmd BufRead,BufNewFile */code/sonar_server*/* let g:syntastic_python_checkers = ['python']
+autocmd BufRead,BufNewFile */code/tip-hackmd/*.js call UseStandardx()
+autocmd BufRead,BufNewFile */code/hackmd-mit/*.js call UseStandardx()
+
+function! UseStandardx()
+	setl et sw=2 ts=2
+	let g:syntastic_javascript_checkers = ['standard']
+	let g:syntastic_javascript_standard_exec = systemlist("yarn bin standardx")[0]
+	let g:syntastic_javascript_standard_args = ['--fix']
+	let g:syntastic_javascript_standard_generic = 1
+	function! SyntasticCheckHook(errors)
+		silent! checktime
+	endfunction
+endfunction

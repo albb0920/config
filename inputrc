@@ -2,12 +2,16 @@ set show-all-if-ambiguous on
 set match-hidden-files off
 set visible-stats on
 set editing-mode vi
+set vi-ins-mode-string +
+set vi-cmd-mode-string :
 set show-mode-in-prompt on
 
 # FreeBSD style history
-"\e[A":history-search-backward
-"\e[B":history-search-forward
+$if Reline
+	# reline moves cursor to beginging of line, seems buggy
+$else
+	"\e[A":history-search-backward
+	"\e[B":history-search-forward
+$endif
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
-
-

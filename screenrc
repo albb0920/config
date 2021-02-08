@@ -2,6 +2,7 @@ hardstatus alwayslastline " %-Lw%{= Bw}%n%f %t%{-}%+Lw"
 shelltitle '} | shell'
 vbell off
 defutf8 on
+scrollback 65536
 bindkey "^[a" prev
 bindkey "^[d" next
 bindkey "^[s" copy
